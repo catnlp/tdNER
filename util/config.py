@@ -204,6 +204,7 @@ class Config:
 
     def write_decoded_results(self, output_file, gold_results, predict_results, name):
         fout = open(output_file, 'w')
+        fout_pre = open(output_file[: -4]+'_predict.txt', 'w')
         sent_num = len(predict_results)
         content_list = []
         if name == 'raw':
@@ -222,8 +223,11 @@ class Config:
             sent_length = len(predict_results[idx])
             for idy in range(sent_length):
                 fout.write(content_list[idx][0][idy] + '\t' + gold_results[idx][idy] + '\t' + predict_results[idx][idy] + '\n')
+                fout_pre.write(content_list[idx][0][idy] + '\t' + predict_results[idx][idy] + '\n')
                 # print(content_list[idx][0][idy] + '\t' + gold_results[idx][idy] + '\t' + predict_results[idx][idy])
             fout.write('\n')
+            fout_pre.write('\n')
             # print()
         fout.close()
+        fout_pre.close()
         print('Predict %s result has been written into file. %s' % (name, output_file))

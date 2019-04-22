@@ -20,19 +20,18 @@ np.random.seed(seed_num)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Tuning with NER')
-    parser.add_argument('--wordemb', help='Embedding for words', default='wiki')
-    # parser.add_argument('--charemb', help='Embedding for chars', default='None')
+    parser.add_argument('--wordemb', help='Embedding for words', default='zhwiki')
     parser.add_argument('--status', choices=['train', 'test', 'decode'], help='update algorithm', default='decode')
-    parser.add_argument('--savemodel', default='model/intelligence/lstmcrf_bio_clean') # catnlp
-    parser.add_argument('--savedset', help='Dir of saved data setting', default='model/intelligence/lstmcrf_bio_clean.dset') # catnlp
-    parser.add_argument('--train', default='data/raw/intelligence/train.bio')
-    parser.add_argument('--test', default='data/raw/intelligence/test-clean.bio')
+    parser.add_argument('--savemodel', default='model/intelligence/lstmcrf_train_all_bio') # catnlp
+    parser.add_argument('--savedset', help='Dir of saved data setting', default='model/intelligence/lstmcrf_train_all_bio.dset') # catnlp
+    parser.add_argument('--train', default='data/label/intelligence/all/train-all.bio')
+    parser.add_argument('--test', default='data/label/intelligence/all/test-clean.bio')
     parser.add_argument('--gpu', default='True')
     parser.add_argument('--seg', default='True')
     parser.add_argument('--extendalphabet', default='True')
-    parser.add_argument('--raw', default='data/raw/intelligence/test/test-17.bio')
-    parser.add_argument('--loadmodel', default='/home/wk/CatNER/Pycharm/tdNER/model/intelligence/lstmcrf_bio_clean/intelligence_bio_clean')
-    parser.add_argument('--output', default='model/intelligence/decode.out')
+    parser.add_argument('--raw', default='data/label/intelligence/all/test-clean.bio')
+    parser.add_argument('--loadmodel', default='model/intelligence/lstmcrf_train_all_bio/intelligence_train_all_bio')
+    parser.add_argument('--output', default='data/label/intelligence/all/decode_train_all_bio.txt')
     args = parser.parse_args()
 
     train_file = args.train
@@ -72,6 +71,10 @@ if __name__ == '__main__':
         print('Word Embedding: ', emb)
         if emb == 'wiki':
             emb_file = 'data/embedding/wiki_100.utf8'
+        elif emb == 'zhwiki':
+            emb_file = 'data/embedding/zhwiki_100.txt'
+        elif emb == 'sogou':
+            emb_file = 'data/embedding/sogou_news_100.txt'
         else:
             emb_file = None
         # char_emb_file = args.charemb.lower()
@@ -97,7 +100,7 @@ if __name__ == '__main__':
         # if char_emb_file != 'none':
         #     print('load char emb file...norm: ', config.norm_char_emb)
         #     config.build_char_pretrain_emb(char_emb_file)
-        name = 'intelligence_bio_clean'
+        name = 'intelligence_train_all_bio'
         train(config, name, dset_dir, save_model_dir, seg)
     elif status == 'test':
         data = load_data_setting(dset_dir)
